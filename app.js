@@ -1,3 +1,4 @@
+// Assign variables
 var houseTotal = 0;
 var playerTotal = 0;
 
@@ -9,6 +10,7 @@ var deck;
 
 var canHit = true; // allows the player to hit when under or equal to 21
 
+// Start the game with initial functions
 window.onload = () => {
     buildDeck();
     shuffleDeck();
@@ -16,7 +18,7 @@ window.onload = () => {
 }
 
 function buildDeck() {
-    let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]; // cards
+    let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]; // Array of cards
     let types = ["C", "D", "H", "S"]; // suits
     deck = []; // empty array of cards
 
@@ -26,26 +28,26 @@ function buildDeck() {
             deck.push(values[j] + "-" + types[i]); 
         }
     }
-    //console.log(deck);
+    //console.log(deck); // Testing
 
 }
 
 function shuffleDeck() {
     for (let i = 0; i < deck.length; i++) {
-        let j = Math.floor(Math.random() * deck.length); // math.random gives either 0 or 1, multiply that by 52 => (0-51.9999)
+        let j = Math.floor(Math.random() * deck.length); // math.random gives either 0 or 1, multiply that by 52 (deck length) to choose a random card
         let temp = deck[i];
         deck[i] = deck[j];
         deck[j] = temp;
     }
-    console.log(deck);
+    console.log(deck); // test deck to make sure shuffled
 }
 
 function startGame() {
     hidden = deck.pop(); // takes the last card of deck array
     houseTotal += getValue(hidden);
-    houseAceCount += checkAce(hidden); // check if hidden car is ace
-    //console.log(hidden);
-    //console.log(houseTotal);
+    houseAceCount += checkAce(hidden); // check if hidden card is ace
+    //console.log(hidden); // test top card
+    //console.log(houseTotal); // test house total card count
     while (houseTotal < 17) {
         let cardImg = document.createElement("img"); // create an img element
         let card = deck.pop(); //take the last item from deck and assign to card
@@ -65,12 +67,13 @@ function startGame() {
         playerAceCount += checkAce(card);
         document.getElementById("player-cards").append(cardImg);
     }
-    console.log(playerTotal);
+    console.log(playerTotal); // test player total card count
     document.getElementById("hit").addEventListener("click", hit); // get the hit button from html, when clicked execute hit function.
     document.getElementById("stay").addEventListener("click", stay);
 }
 
 function hit() {
+    // run if statement to see if already bust
     if (!canHit) {
         return;
     }
@@ -95,6 +98,7 @@ function stay() {
     canHit = false;
     document.getElementById("hidden").src = "./images/" + hidden + ".png";
 
+    // Run conditions for win, lose or draw
     let message = "";
     if (playerTotal > 21) {
         message = "You Lose!";
@@ -102,7 +106,7 @@ function stay() {
     else if (houseTotal > 21) {
         message = "You win!";
     }
-    //both you and dealer <= 21
+    //both player and dealer <= 21
     else if (playerTotal == houseTotal) {
         message = "Draw!";
     }
@@ -119,10 +123,10 @@ function stay() {
 }
 
 function getValue(card) {
-    let data = card.split("-"); // takes the card and removes the '-' leaving an array of number and suite e.g. ["4", "D"]
+    let data = card.split("-"); // takes the card and removes the '-' leaving an array of number and suit e.g. ["4", "D"]
     let value = data[0]; //takes the card number, index 0 of data.
 
-    if (isNaN(value)) { // if calue is not a number then return 11 if Ace, 10 otherwise. K, Q, J all count as 10.
+    if (isNaN(value)) { // if value is not a number then return 11 if Ace, 10 otherwise. K, Q, J all count as 10.
         if (value == "A") {
             return 11;
         }
